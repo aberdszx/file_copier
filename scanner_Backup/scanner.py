@@ -7,24 +7,23 @@ import pyautogui
 
 
 # Function to copy from desktop to NAS
-def copy():
-    source = r"C:\Users\MQ-SCAN\Desktop"
+def copy(source, destination):
     print("Copying " + source)
-    destination = r"\\mrq-server\it\SCANNED_FILES"
     shutil.copytree(source, destination,dirs_exist_ok=True)
 
 
 # Delete the copied directories
-def delete():
-    source_dir = r"C:\Users\MQ-SCAN\Desktop"
-    dir_list = ["IT", "HR", "MOD", "FOD", "OBC-OPE", "MARKETING", "ADMIN", "ACCOUNTING", "EXEC", "MAINTENANCE", "BDD"]
-    shutil.rmtree(source_dir, ignore_errors=True)
+def delete(source):
+    shutil.rmtree(source, ignore_errors=True)
     print("deleted")
+
+
+def mkdir():
+    dir_list = ["IT", "HR", "MOD", "FOD", "OBC-OPE", "MARKETING", "ADMIN", "ACCOUNTING", "EXEC", "MAINTENANCE", "BDD"]
     for item in dir_list:
-        path = os.path.join(source_dir, item)
+        path = os.path.join(r"C:\Users\adrian-pc\Desktop", item)
         os.mkdir(path)
     print("Directories created")
-    time.sleep(10)
 
 
 
@@ -59,10 +58,13 @@ def time_detection():
             time.sleep(30)
 
 
-
+sources = [r"C:\Users\MQ-SCAN\Desktop", r"C:\Users\MQ-SCAN\Downloads", r"C:\Users\MQ-SCAN\Documents"]
+destination = r"\\mrq-server\it\SCANNED_FILES"
 while time_detection():
-    copy()
-    delete()
+    for source in sources:
+        copy(source, destination)
+        delete(source)
+    mkdir()
     pyautogui.hotkey("win", "d")
     time.sleep(1)
     window_creation()
